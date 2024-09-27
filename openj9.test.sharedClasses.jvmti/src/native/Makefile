@@ -104,11 +104,17 @@ ifeq ($(PLATFORM),linux_390-64)
 endif
 
 ifeq ($(PLATFORM),zos_390-31)
-    CC=c89
-    LD=c89
-    CFLAGS=-W c,exportall -D_JNI_IMPLEMENTATION -D_TRIVIAL_AGENT -W "c,langlvl(extended)" -W "c,float(ieee)" -W "c,convlit(ISO8859-1)" -W "c,xplink,dll" -W "l,xplink,dll" -DZOS -c -o $(OBJDIR)/sharedClasses$(OSUFFIX)
-    LFLAGS=-W l,XPLINK,dll -o 
-    IFLAGS=-I. -I$(JAVA_HOME)/../include -I$(JAVA_HOME)/../include/zos -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/zos -I/usr/include
+  CC=c89
+  LD=c89
+
+  RMLIST=*.o *.x
+  CFLAGS=-W c,exportall -D_JNI_IMPLEMENTATION -D_TRIVIAL_AGENT -W "c,langlvl(extended)" -W "c,float(ieee)" -W "c,convlit(ISO8859-1)" -W "c,xplink,dll" -W "l,xplink,dll" -DZOS -c
+ifdef LIBSRCDIR
+  IFLAGS=-I. -I$(LIBSRCDIR) -I$(JAVA_HOME)/include -I/usr/include -I$(SRCDIR)
+else
+  IFLAGS=-I. -I$(JAVA_HOME)/include -I/usr/include -I$(SRCDIR)
+endif
+  LFLAGS=-W l,XPLINK,dll  
 endif
 
 ifeq ($(PLATFORM),zos_390-64)
